@@ -4,13 +4,13 @@ const router = express.Router();
 
 router.post("/", (req, res) => {
   const { body, simpsons } = req;
-  // check that username and password match details on system
-  //   console.log(req.body);
 
+  // check that username and password match details on system
   if (!body.userName || !body.password) {
     res.send({ status: 0, error: "Wrong credentials" });
   }
 
+  // find user
   const indexOfUser = simpsons.findIndex((user) => {
     return user.userName === body.userName && user.password === body.password;
   });
@@ -18,8 +18,9 @@ router.post("/", (req, res) => {
   // if user & password match, generate a token and send to user
   if (indexOfUser > -1) {
     const currentToken = getUniqueId(64);
-    let userTokens = [];
 
+    // add token to array
+    let userTokens = [];
     userTokens.push(currentToken);
 
     simpsons[indexOfUser].userTokens = [...userTokens];

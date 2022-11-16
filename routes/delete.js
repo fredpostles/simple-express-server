@@ -1,15 +1,8 @@
 const express = require("express");
 const router = express.Router();
 
-router.delete("/:id", (req, res) => {
-  // const idAsNumber = Number(req.params.id);
-
-  // check that valid number was sent in
-  // if (!idAsNumber) {
-  //   res.send({ status: 0, error: "No item id set" });
-  //   return;
-  // }
-
+router.delete("/", (req, res) => {
+  // find user to delete
   const indexOfItem = req.simpsons.findIndex((item) => {
     return item.id === req.currentUser.id;
   });
