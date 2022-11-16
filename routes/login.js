@@ -18,11 +18,13 @@ router.post("/", (req, res) => {
   // if user & password match, generate a token and send to user
   if (indexOfUser > -1) {
     const currentToken = getUniqueId(64);
-    let userTokens = [];
+    let userTokens = simpsons[indexOfUser].userTokens
+      ? [...simpsons[indexOfUser].userTokens]
+      : [];
 
     userTokens.push(currentToken);
 
-    simpsons[indexOfUser].userTokens = [...userTokens];
+    simpsons[indexOfUser].userTokens = userTokens;
 
     res.send({ status: 1, currentToken });
     return;

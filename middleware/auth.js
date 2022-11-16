@@ -1,27 +1,26 @@
 module.exports.checkToken = (req, res, next) => {
-  const { simpsons, headers } = req;
+  const { body, simpsons, headers } = req;
 
-  console.log(headers);
-
-  if (!headers.currentToken) {
+  if (!headers.currenttoken) {
     res.send({ status: 0, error: "Token not set" });
+    return;
   }
 
-  // find the user
-  //   const indexOfItem = simpsons.findIndex(
-  //     (item) => item.token === headers.token
-  //   );
-  const indexOfItem = userTokens.findIndex(
-    (item) => item.token === headers.currentToken
-  );
+  const indexOfUser = simpsons.findIndex((user) => {
+    if (!user.userTokens) return;
+    return user.userTokens.includes(headers.currenttoken);
+  });
 
+  console.log(indexOfUser);
   // check the token
-  if (indexOfItem === -1) {
+  if (indexOfUser === -1) {
     res.send({ status: 0, error: "Token not valid" });
     return;
   }
 
-  req.currentUser = simpsons[indexOfItem];
+  console.log("Auth ran, token valid");
+
+  req.currentUser = simpsons[indexOfUser];
 
   next();
 };

@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 
-router.put("/:id", (req, res) => {
+router.put("/", (req, res) => {
   const { body, currentUser } = req;
 
   if (body.quote && typeof body.quote === "string") {
