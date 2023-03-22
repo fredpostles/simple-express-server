@@ -8,6 +8,7 @@ router.post("/", (req, res) => {
   // check that username and password match details on system
   if (!body.userName || !body.password) {
     res.send({ status: 0, error: "Wrong credentials" });
+    return;
   }
 
   // find user
@@ -19,11 +20,12 @@ router.post("/", (req, res) => {
   if (indexOfUser > -1) {
     const currentToken = getUniqueId(64);
 
-    // add token to array
-    let userTokens = [];
-    userTokens.push(currentToken);
-
-    simpsons[indexOfUser].userTokens = [...userTokens];
+    // add token to array or create array if it doesn't exist
+    if (simpsons[indexOfUser].userTokens) {
+      simpsons[indexOfUser].userTokens.push(currentToken);
+    } else {
+      simpsons[indexOfUser].userTokens = [currentToken];
+    }
 
     res.send({ status: 1, currentToken });
     return;

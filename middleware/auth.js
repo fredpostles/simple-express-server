@@ -1,27 +1,22 @@
 module.exports.checkToken = (req, res, next) => {
   const { simpsons, headers } = req;
 
-  console.log(headers);
-
-  if (!headers.currentToken) {
+  // NOTE: insomnia turns currentToken into all lowercase, hence lowercase here
+  if (!headers.currenttoken) {
     res.send({ status: 0, error: "Token not set" });
+    return;
   }
 
   // find the user
-  //   const indexOfItem = simpsons.findIndex(
-  //     (item) => item.token === headers.token
-  //   );
-  const indexOfItem = userTokens.findIndex(
-    (item) => item.token === headers.currentToken
+  const user = simpsons.find(
+    (item) => item.userTokens && item.userTokens.includes(headers.currenttoken)
   );
-
-  // check the token
-  if (indexOfItem === -1) {
+  if (!user) {
     res.send({ status: 0, error: "Token not valid" });
     return;
   }
 
-  req.currentUser = simpsons[indexOfItem];
+  req.currentUser = user;
 
   next();
 };

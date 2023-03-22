@@ -8,7 +8,7 @@ router.delete("/", (req, res) => {
   });
 
   req.simpsons.splice(indexOfItem, 1);
-  res.send({ status: 1 });
+  res.send({ status: 1, message: "User successfully deleted" });
   return;
 
   // res.send({ status: 0, error: "Item not found" });

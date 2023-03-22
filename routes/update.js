@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 
-router.put("/:id", (req, res) => {
+router.put("/", (req, res) => {
   const { body, currentUser } = req;
 
   if (body.quote && typeof body.quote === "string") {
@@ -17,7 +17,7 @@ router.put("/:id", (req, res) => {
     currentUser.characterDirection = body.characterDirection;
   }
 
-  res.send({ status: 1 });
+  res.send({ status: 1, message: "Success!" });
 });
 
 module.exports = router;

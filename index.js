@@ -30,7 +30,7 @@ app.use("/delete", checkToken, require("./routes/delete"));
 app.use("/create", require("./routes/create"));
 app.use("/update", checkToken, require("./routes/update"));
 app.use("/login", require("./routes/login"));
-app.use("/logoff", require("./routes/logoff"));
+app.use("/logoff", checkToken, require("./routes/logoff"));
 
 const port = process.env.PORT || 6001;
 app.listen(port, () => {
