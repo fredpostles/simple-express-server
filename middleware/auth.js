@@ -1,21 +1,19 @@
-module.exports.checkToken = (req, res, next) => {
-  const { simpsons, headers } = req;
+const { checkToken } = require("../mysql/queries");
 
-  if (!headers.token) {
+module.exports.checkToken = async (req, res, next) => {
+  const { token } = req.headers;
+
+  if (!token) {
     res.send({ status: 0, error: "Token not set" });
     return;
   }
 
-  // find the user
-  const user = simpsons.find(
-    (item) => item.userTokens && item.userTokens.includes(headers.token)
-  );
-  if (!user) {
-    res.send({ status: 0, error: "Token not valid" });
+  const results = await req.asyncMySQL(checkToken(token));
+
+  if (results.length) {
+    next();
     return;
   }
 
-  req.currentUser = user;
-
-  next();
+  res.send({ status: 0, error: "Invalid token!" });
 };

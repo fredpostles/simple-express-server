@@ -1,17 +1,10 @@
 const express = require("express");
+const { deleteUser } = require("../mysql/queries");
 const router = express.Router();
 
-router.delete("/", (req, res) => {
-  // find user to delete
-  const indexOfItem = req.simpsons.findIndex((item) => {
-    return item.id === req.currentUser.id;
-  });
-
-  req.simpsons.splice(indexOfItem, 1);
+router.delete("/", async (req, res) => {
+  await req.asyncMySQL(deleteUser(req.headers.token));
   res.send({ status: 1, message: "User successfully deleted" });
-  return;
-
-  // res.send({ status: 0, error: "Item not found" });
 });
 
 module.exports = router;
