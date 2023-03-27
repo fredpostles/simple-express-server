@@ -23,9 +23,9 @@ connection.connect();
 // });
 
 // promisified version
-function asyncMySQL(query) {
+function asyncMySQL(query, variables) {
   return new Promise((resolve, reject) => {
-    connection.query(query, (error, results) => {
+    connection.query(query, variables, (error, results) => {
       if (error) {
         console.log("Connection to server failed; check server is running!");
         reject("mySQL error:", error);

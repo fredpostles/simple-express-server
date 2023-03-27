@@ -3,7 +3,13 @@ const { deleteToken } = require("../mysql/queries");
 const router = express.Router();
 
 router.delete("/", async (req, res) => {
-  await req.asyncMySQL(deleteToken(req.headers.token));
+  const { token } = req.headers;
+
+  const query = deleteToken();
+
+  const params = [token];
+
+  await req.asyncMySQL(query, params);
 
   res.send({
     status: 1,

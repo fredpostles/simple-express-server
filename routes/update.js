@@ -7,15 +7,26 @@ router.put("/", async (req, res) => {
   let { email, name, password } = req.body;
   const { token } = req.headers;
 
+  let params = [];
+
   if (email && typeof email === "string") {
-    await req.asyncMySQL(updateUser("email", email, token));
+    let column = "email";
+    const query = updateUser(column);
+    params = [email, token];
+    await req.asyncMySQL(query, params);
   }
   if (name && typeof name === "string") {
-    await req.asyncMySQL(updateUser("name", name, token));
+    let column = "name";
+    const query = updateUser(column);
+    params = [name, token];
+    await req.asyncMySQL(query, params);
   }
   if (password && typeof password === "string") {
     password = sha256(process.env.SALT + password);
-    await req.asyncMySQL(updateUser("password", password, token));
+    let column = "password";
+    const query = updateUser(column);
+    params = [password, token];
+    await req.asyncMySQL(query, params);
   }
 
   res.send({ status: 1, message: "Success!" });

@@ -8,12 +8,13 @@ router.post("/", async (req, res) => {
 
   //check we have all the data
   if (name && email && password) {
-    console.log("Salt:", process.env.SALT);
-    console.log(password);
     password = sha256(process.env.SALT + password);
-    console.log(password);
 
-    const result = await req.asyncMySQL(createUser(name, email, password));
+    const query = createUser();
+
+    const params = [name, email, password];
+
+    const result = await req.asyncMySQL(query, params);
 
     if (result.affectedRows === 1) {
       res.send({ status: 1, message: "Success - account created!" });

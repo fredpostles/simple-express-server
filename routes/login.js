@@ -3,6 +3,7 @@ const { checkCreds, addToken } = require("../mysql/queries");
 const { getUniqueId } = require("../utils");
 const router = express.Router();
 const sha256 = require("sha256");
+const chalk = require("chalk");
 
 router.post("/", async (req, res) => {
   let { email, password } = req.body;
@@ -15,7 +16,11 @@ router.post("/", async (req, res) => {
 
   password = sha256(process.env.SALT + password);
 
-  const results = await req.asyncMySQL(checkCreds(email, password));
+  const query = checkCreds();
+
+  const params = [email, password];
+
+  const results = await req.asyncMySQL(query, params);
 
   // if credentials don't match, return
   if (results.length === 0) {
@@ -25,7 +30,11 @@ router.post("/", async (req, res) => {
 
   const token = getUniqueId(64);
 
-  await req.asyncMySQL(addToken(results[0].id, token));
+  const secondQuery = addToken();
+
+  const secondParams = [results[0].id, token];
+
+  await req.asyncMySQL(secondQuery, secondParams);
 
   res.send({
     status: 1,

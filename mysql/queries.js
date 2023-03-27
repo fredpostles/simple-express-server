@@ -1,59 +1,59 @@
 const queries = {
-  createUser: (name, email, password) => {
+  createUser: () => {
     return `INSERT IGNORE users 
                 (name, email, password) 
                     VALUES 
-                        ("${name}", "${email}", "${password}");`;
+                        (?, ?, ?);`;
   },
-  checkCreds: (email, password) => {
+  checkCreds: () => {
     return `SELECT id 
                 FROM users 
-                    WHERE email = "${email}" 
-                        AND password = "${password}";`;
+                    WHERE email = ? 
+                        AND password = ?;`;
   },
 
-  addToken: (user_id, token) => {
+  addToken: () => {
     return `INSERT INTO logins 
                 (user_id, token) 
                     VALUES 
-                        ("${user_id}", "${token}");`;
+                        (?, ?);`;
   },
 
-  deleteToken: (token) => {
+  deleteToken: () => {
     return `DELETE FROM logins 
-                WHERE token = "${token}";`;
+                WHERE token = ?;`;
   },
 
-  getUser: (token) => {
+  getUser: () => {
     return `SELECT name, email, users.entry_date
                 FROM users
                     JOIN logins 
                         ON users.id = logins.user_id
-                            WHERE token = "${token}";`;
+                            WHERE token = ?;`;
   },
 
-  deleteUser: (token) => {
+  deleteUser: () => {
     return `DELETE users 
                 FROM users
                     JOIN logins
                         ON users.id = logins.user_id
-                            WHERE token = "${token}"`;
+                            WHERE token = ?`;
   },
 
-  updateUser: (column, value, token) => {
+  updateUser: (column) => {
     return `UPDATE users
                 JOIN logins
                     ON users.id = logins.user_id
-                        SET ${column} = "${value}"
-                            WHERE token = "${token}";`;
+                        SET ${column} = ?
+                            WHERE token = ?;`;
   },
 
-  checkToken: (token) => {
+  checkToken: () => {
     return `SELECT users.id 
               FROM users
                 JOIN logins
                   ON users.id = logins.user_id
-                    WHERE token = "${token}";`;
+                    WHERE token = ?;`;
   },
 };
 
